@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, migrate
 
 
 db_name = 'bookshelf'
@@ -7,6 +8,7 @@ db_path = 'postgresql://{}:{}@{}/{}'.format(
 )
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 # ----------------------------------------------------------------------------#
 # setup_db: binds a flask app and a SQLAlchemy service
@@ -17,7 +19,8 @@ def setup_db(app, database_path=db_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    db.create_all()
+    # db.create_all()
+    migrate.init_app(app, db)
 
 # ----------------------------------------------------------------------------#
 # Book model
@@ -26,9 +29,9 @@ def setup_db(app, database_path=db_path):
 class Book(db.Model):
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String())
-    author = db.Column(db.String())
-    rating = db.Column(db.Integer)
+    title = db.Column(db.String(), nullable=False)
+    author = db.Column(db.String(), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
 
     def __init__(self, title, author, rating):
         self.title = title
