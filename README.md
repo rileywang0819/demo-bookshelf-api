@@ -1,5 +1,9 @@
-Bookshelf Application
------ 
+# Bookshelf Application
+
+This project is a virtual bookshelf for students. Students are able to add their books to the bookshelf, give them a rating, update the rating and search through book lists.
+
+All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps/pep-0008/).
+
 
 ## Tech Stack
 
@@ -9,15 +13,17 @@ Bookshelf Application
 - JSONify
 - Unittest
 
+## Getting Started
 
-
-## Pre-requisites
+### Pre-requisites
 * Developers using this project should already have Python3, pip and node installed on their local machines.
 
+### Backend
 
 * **Start your virtual environment** 
 
 From the backend folder run
+
 ```bash
 pip install virtualenv
 python -m virtualenv env
@@ -30,7 +36,8 @@ source env/Scripts/activate
 
 * **Install dependencies**<br>
 
-From the backend folder run 
+From the backend folder run
+
 ```bash
 # All required packages are included in the requirements file. 
 pip install -r requirements.txt
@@ -38,20 +45,23 @@ pip install -r requirements.txt
 pip uninstall flask-socketio -y
 ```
 
-## Run the Project
+All required packages are included in `requirements.txt` file.
 
 
-### Step 0: Start or Stop the PostgreSQL server
+* **Run the Project**
+
+
+**Step 0: Start or Stop the PostgreSQL server**
 
 > Click [here](https://tableplus.com/blog/2018/10/how-to-start-stop-restart-postgresql-server.html) for reference.
 
 
-### Step 1 - Create and Populate the database
+**Step 1 - Create and Populate the database**
 
-1. **Verify the database username**<br>
-Verify that the database user in the `/backend/books.psql`, `/backend/models.py`, and `/backend/test_flaskr.py` files must be either the `student` or `postgres` (default username). 
+1. Verify the database username<br/>
+Verify that the database user in the `/backend/books.psql`, `/backend/models.py`, and `/backend/test_flaskr.py` files must be `postgres` (default username). 
 
-2. **Create the database and a user**<br>
+2. Create the database and a user<br/>
 In your terminal, navigate to the `backend` directory, and run the following:
 
 ```bash
@@ -71,7 +81,7 @@ psql -U postgres
 ```
 
 
-3. **Create tables**<br>
+3. Create tables<br>
 Once your database is created, you can create tables (`bookshelf`) and apply contraints,
 
 ```bash
@@ -82,10 +92,10 @@ psql -f books.psql -U postgres -d bookshelf
 su - postgres bash -c "psql bookshelf < /path/to/exercise/backend/books.psql"
 ```
 
-**You can even drop the database and repopulate it, if needed, using the commands above.** 
+*You can even drop the database and repopulate it, if needed, using the commands above.*
 
 
-### Step 2: Start the backend server
+**Step 2: Start the backend server**
 
 Navigate to the `/backend/flaskr/__init__.py` file, start your (backend) Flask server by running the command below from the `/backend` directory.
 
@@ -100,8 +110,7 @@ These commands put the application in development and directs our application to
 The application will run on `http://127.0.0.1:5000/` by default and is set as a proxy in the frontend configuration. Also, the current version of the application does not require authentication or API keys. 
 
 
-
-### Step 3: Start the frontend
+### Frontend
 
 (You can start the frontend even before the backend is up!)
 
@@ -115,19 +124,34 @@ npm start
 By default, the frontend will run on `localhost:3000`. Close the terminal if you wish to stop the frontend server. 
 
 
----
+### Testing
 
-## Additional information
-
-#### Running Tests
+### Running Tests
 
 If any exercise needs testing, navigate to the `/backend` folder and run the following commands:
 
 ```bash
-psql postgres
-dropdb bookshelf_test
-createdb bookshelf_test
-\q
-psql bookshelf_test < books.psql
 python test_flaskr.py
 ```
+
+The output will looks as:
+
+```text
+-------------------
+Ran 0 tests in 0.000s
+OK
+```
+
+**Note:**
+
+Once you run the test to delete a particular book, it will delete that book (book_id) from the database. Therefore the same test won't pass again. You can re-run the test with different book_id.
+
+Alternativley, you can repopulate the database anytime by running the following commands from `backend` folder. Refer previous "Step 1 - Create and Populate the database" .
+
+## API Reference
+
+See it in [this page](https://github.com/rileywang0819/demo-bookshelf-api/blob/master/backend/README.md)
+
+## Furthermore
+
+You can feel free to expand on the project in any way you can dream up to extend your skills. For instance, you could add additional book information to each entry or create individual book views including more information about the book, your thoughts or when you completed it.
