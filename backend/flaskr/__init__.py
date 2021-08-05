@@ -44,7 +44,7 @@ def create_app(test_config=None):
         return response
 
     @app.route('/books', methods=['GET'])
-    def get_books():
+    def get_paginated_books():
         """ Retrieves all books, paginated. """
         books = Book.query.order_by(Book.id).all()
         current_books = paginate_books(request, books)
@@ -105,18 +105,32 @@ def create_app(test_config=None):
         new_title = body.get('title', None)
         new_author = body.get('author', None)
         new_rating = body.get('rating', None)
+        search_word = body.get('search', None)
         try:
-            book = Book(title=new_title, author=new_author, rating=new_rating)
-            book.insert()
-            books = Book.query.order_by(Book.id).all()
-            current_books = paginate_books(request, books)
+            if search_word:
+                books = Book.query.order_by(Book.id).filter(
+                    Book.title.ilike('%{}%'.format(search_word))
+                ).all()
+                current_books = paginate_books(request, books)
+                
+                return jsonify({
+                    'success': True,
+                    'totalBooks': len(books),
+                    'books': current_books 
+                })
+            else:
+                book = Book(title=new_title, author=new_author,
+                            rating=new_rating)
+                book.insert()
+                books = Book.query.order_by(Book.id).all()
+                current_books = paginate_books(request, books)
 
-            return jsonify({
-                'success': True,
-                'created': book.id,
-                'books': current_books,
-                'total_books': len(books)
-            })
+                return jsonify({
+                    'success': True,
+                    'created': book.id,
+                    'books': current_books,
+                    'total_books': len(books)
+                })
         except:
             abort(422)
 
@@ -127,7 +141,7 @@ def create_app(test_config=None):
             "error": 404,
             "message": "Not found"
         }), 404
-    
+
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
@@ -135,7 +149,7 @@ def create_app(test_config=None):
             "error": 400,
             "message": "Bad Request"
         }), 400
-        
+
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
@@ -143,7 +157,7 @@ def create_app(test_config=None):
             "error": 422,
             "message": "Unprocessable"
         }), 422
-        
+
     @app.errorhandler(405)
     def not_allowed(error):
         return jsonify({
@@ -151,5 +165,5 @@ def create_app(test_config=None):
             "error": 405,
             "message": "Not Allowed Method"
         }), 405
-        
+
     return app
