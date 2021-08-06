@@ -4,7 +4,7 @@ from flask_migrate import Migrate, migrate
 
 db_name = 'bookshelf'
 db_path = 'postgresql://{}:{}@{}/{}'.format(
-    'postgres', 'pupu0819', 'localhost:5432', db_name
+    'postgres', 'password', 'localhost:5432', db_name
 )
 
 db = SQLAlchemy()

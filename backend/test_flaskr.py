@@ -15,7 +15,7 @@ class BookshelfTestCase(unittest.TestCase):
         self.client = self.app.test_client
         self.db_name = 'bookshelf_test'
         self.db_path = 'postgresql://{}:{}@{}/{}'.format(
-            'postgres', 'pupu0819', 'localhost:5432', self.db_name
+            'postgres', 'password', 'localhost:5432', self.db_name
         )
         setup_db(self.app, self.db_path)
         
